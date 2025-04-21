@@ -2,15 +2,15 @@ services:
   - type: web
     name: plant-disease-detector-backend
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && gunicorn --chdir . app:app
+    buildCommand: |
+      pip install -r requirements.txt
+      cp -r backend/* .
+    startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.0
       - key: PORT
         value: 8000
-      - key: PYTHONPATH
-        value: backend
 
   - type: static
     name: plant-disease-detector-frontend
