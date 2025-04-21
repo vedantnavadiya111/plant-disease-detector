@@ -3,7 +3,7 @@ import requests
 import torch
 from tqdm import tqdm
 
-MODEL_URL = "https://drive.google.com/uc?id=YOUR_GDRIVE_FILE_ID"  # You'll need to update this
+MODEL_URL = "https://drive.google.com/uc?id=1jDF5ITmKc-Ij_NwFIMW1VatP9P6bqkWm"  # Updated with your model file ID
 MODEL_PATH = 'models/plant_disease_model.pth'
 CLASS_INDICES_PATH = 'models/class_indices.json'
 
