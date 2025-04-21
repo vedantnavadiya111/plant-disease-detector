@@ -4,6 +4,10 @@ const App = () => {
     const [prediction, setPrediction] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://plant-disease-detector-backend.onrender.com';
+
     const handleFileSelect = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -24,7 +28,7 @@ const App = () => {
         formData.append('file', selectedFile);
 
         try {
-            const response = await fetch('http://localhost:5000/api/predict', {
+            const response = await fetch(`${API_URL}/api/predict`, {
                 method: 'POST',
                 body: formData,
             });
