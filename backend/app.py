@@ -6,7 +6,7 @@ import torch
 import torchvision.transforms as transforms
 from PIL import Image
 import json
-from train_model import create_model
+from model_manager import load_model, CLASS_INDICES_PATH
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -22,27 +22,21 @@ PORT = int(os.environ.get('PORT', 5000))
 # Create uploads folder if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Load the model and class indices
-MODEL_PATH = 'models/plant_disease_model.pth'
-CLASS_INDICES_PATH = 'models/class_indices.json'
-
 # Device configuration
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+# Load class indices and model
 try:
-    # Load class indices
     with open(CLASS_INDICES_PATH, 'r') as f:
         class_to_idx = json.load(f)
-        # Invert the dictionary to get idx_to_class
         idx_to_class = {v: k for k, v in class_to_idx.items()}
     
-    # Load model
-    checkpoint = torch.load(MODEL_PATH, map_location=DEVICE)
     num_classes = len(class_to_idx)
-    model = create_model(num_classes)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    model.eval()
-    print("Model and class indices loaded successfully!")
+    model = load_model(DEVICE, num_classes)
+    if model:
+        print("Model loaded successfully!")
+    else:
+        print("Failed to load model")
 except Exception as e:
     print(f"Error loading model or class indices: {str(e)}")
     model = None
